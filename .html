@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Awantika 💝</title>
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- AOS (Animate On Scroll) -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <!-- Three.js (3D Effects) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+      color: #fff;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1a1a2e;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(#e94560, #ff6b6b);
+      border-radius: 10px;
+    }
+
+    /* Floating Hearts Background */
+    #floating-hearts {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .slide {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,105,180,0.1) 0%, rgba(0,0,0,0) 70%);
+      z-index: -1;
+      animation: pulse 15s infinite alternate;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.8); opacity: 0.3; }
+      100% { transform: scale(1.2); opacity: 0.1; }
+    }
+
+    .slide img {
+      max-width: 350px;
+      border-radius: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 15px 35px rgba(233, 69, 96, 0.3);
+      transition: transform 0.5s ease;
+      border: 5px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .slide img:hover {
+      transform: scale(1.05) rotate(-2deg);
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(45deg, #ff6b6b, #e94560);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-weight: 800;
+    }
+
+    .cursive {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.5rem;
+    }
+
+    p {
+      font-size: 1.3rem;
+      max-width: 700px;
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+
+    .btn {
+      background: linear-gradient(45deg, #e94560, #ff6b6b);
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(233, 69, 96, 0.4);
+      margin-top: 20px;
+    }
+
+    .btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(233, 69, 96, 0.6);
+    }
+
+    /* Floating Particles */
+    #particles-js {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    /* Music Player */
+    .music-player {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 50px;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      z-index: 100;
+    }
+
+    .music-player i {
+      font-size: 1.5rem;
+      margin-right: 15px;
+      cursor: pointer;
+      color: #ff6b6b;
+    }
+
+    /* Love Letter Popup */
+    .letter-popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.5s ease;
+    }
+
+    .letter-popup.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .letter-content {
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      padding: 40px;
+      border-radius: 20px;
+      max-width: 600px;
+      position: relative;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 105, 180, 0.3);
+    }
+
+    .close-letter {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #ff6b6b;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      h1 { font-size: 2.2rem; }
+      .cursive { font-size: 2rem; }
+      .slide img { max-width: 280px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Floating Hearts Background -->
+  <div id="floating-hearts"></div>
+
+  <!-- Particles.js Background -->
+  <div id="particles-js"></div>
+
+  <!-- Music Player (Auto-Play) -->
+  <div class="music-player">
+    <i class="fas fa-music"></i>
+    <audio id="bg-music" loop autoplay>
+      <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
+    </audio>
+    <span>Birthday Music 🎵</span>
+  </div>
+
+  <!-- Slides (7 Photos) -->
+  <div class="slide" data-aos="fade-up">
+    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Awantika">
+    <h1>Happy Birthday Awantika! <span class="cursive">My Love</span></h1>
+    <p>On this special day, I want you to know that you're the most beautiful algorithm in my life's code. ❤️</p>
+    <button class="btn" id="open-letter">Open Special Message</button>
+  </div>
+
+  <div class="slide" data-aos="fade-left">
+    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Awantika">
+    <h1>You're My <span class="cursive">Perfect Match</span></h1>
+    <p>Like JavaScript to Node.js, like Python to Django - we were meant to be together. 💑</p>
+  </div>
+
+  <div class="slide" data-aos="fade-right">
+    <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Awantika">
+    <h1>My Heart <span class="cursive">Only Compiles</span> For You</h1>
+    <p>No syntax errors, no bugs - just pure love that runs perfectly in my heart's runtime. 💝</p>
+  </div>
+
+  <div class="slide" data-aos="zoom-in">
+    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Awantika">
+    <h1>You're My <span class="cursive">Forever Variable</span></h1>
+    <p>const myHeart = "Awantika"; // Never changing, always true ❤️</p>
+  </div>
+
+  <div class="slide" data-aos="flip-up">
+    <img src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Awantika">
+    <h1>Our Love is <span class="cursive">Infinite</span></h1>
+    <p>while (true) { loveYouMore(); } // This loop never breaks 💞</p>
+  </div>
+
+  <div class="slide" data-aos="fade-down">
+    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Awantika">
+    <h1>You Complete <span class="cursive">My Code</span></h1>
+    <p>Without you, my life would be full of undefined errors! 🥰</p>
+  </div>
+
+  <div class="slide" data-aos="zoom-out">
+    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Awantika">
+    <h1>Happy Birthday <span class="cursive">Beautiful</span></h1>
+    <p>May your day be as amazing as you make my life every day. 🎉💖</p>
+  </div>
+
+  <!-- Love Letter Popup -->
+  <div class="letter-popup" id="letter-popup">
+    <div class="letter-content">
+      <span class="close-letter" id="close-letter">&times;</span>
+      <h2 class="cursive" style="margin-bottom: 20px;">My Dearest Awantika,</h2>
+      <p id="typewriter-text" style="text-align: left; font-size: 1.1rem; line-height: 1.8;"></p>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    // Initialize AOS (Animate On Scroll)
+    AOS.init({
+      duration: 1000,
+      once: true
+    });
+
+    // Music Player (Auto-Play)
+    const musicPlayer = document.querySelector('.music-player');
+    const musicIcon = document.querySelector('.fa-music');
+    const bgMusic = document.getElementById('bg-music');
+    
+    // Auto-play music on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      bgMusic.play().catch(e => console.log("Auto-play blocked by browser"));
+      musicIcon.classList.remove('fa-music');
+      musicIcon.classList.add('fa-pause');
+      musicPlayer.querySelector('span').textContent = 'Playing...';
+    });
+
+    // Toggle play/pause
+    musicPlayer.addEventListener('click', () => {
+      if (bgMusic.paused) {
+        bgMusic.play();
+        musicIcon.classList.remove('fa-music');
+        musicIcon.classList.add('fa-pause');
+        musicPlayer.querySelector('span').textContent = 'Playing...';
+      } else {
+        bgMusic.pause();
+        musicIcon.classList.remove('fa-pause');
+        musicIcon.classList.add('fa-music');
+        musicPlayer.querySelector('span').textContent = 'Paused';
+      }
+    });
+
+    // Love Letter Popup
+    const openLetterBtn = document.getElementById('open-letter');
+    const letterPopup = document.getElementById('letter-popup');
+    const closeLetterBtn = document.getElementById('close-letter');
+    const typewriterText = document.getElementById('typewriter-text');
+
+    openLetterBtn.addEventListener('click', () => {
+      letterPopup.classList.add('active');
+      startTypewriter();
+    });
+
+    closeLetterBtn.addEventListener('click', () => {
+      letterPopup.classList.remove('active');
+    });
+
+    // Typewriter Effect for Love Letter
+    const loveLetter = [
+      "Dear Awantika,",
+      "",
+      "On your special day, I want you to know that you're the most amazing person I've ever met.",
+      "Your smile brightens my darkest days, and your love is the most beautiful algorithm in my life's code.",
+      "",
+      "I promise to always be your debugger, your support system, and your biggest fan.",
+      "No matter what errors life throws at us, we'll solve them together.",
+      "",
+      "Happy Birthday to the woman who makes my heart compile without any warnings or errors.",
+      "",
+      "Forever yours,",
+      "❤️"
+    ];
+
+    let lineIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    let isWaiting = false;
+
+    function startTypewriter() {
+      typewriterText.innerHTML = '';
+      lineIndex = 0;
+      charIndex = 0;
+      typeNextLine();
+    }
+
+    function typeNextLine() {
+      if (lineIndex >= loveLetter.length) return;
+
+      const currentLine = loveLetter[lineIndex];
+      
+      if (charIndex < currentLine.length && !isDeleting && !isWaiting) {
+        typewriterText.innerHTML += currentLine.charAt(charIndex);
+        charIndex++;
+        setTimeout(typeNextLine, 30);
+      } else if (charIndex === currentLine.length && !isWaiting) {
+        isWaiting = true;
+        setTimeout(() => {
+          isWaiting = false;
+          if (lineIndex < loveLetter.length - 1) {
+            typewriterText.innerHTML += '<br><br>';
+          }
+          lineIndex++;
+          charIndex = 0;
+          typeNextLine();
+        }, 1000);
+      }
+    }
+
+    // Confetti Effect
+    function shootConfetti() {
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#ff0000', '#ffff00', '#00ff00', '#0000ff', '#ff00ff']
+      });
+    }
+
+    // Initial Confetti
+    setTimeout(shootConfetti, 1000);
+
+    // Floating Hearts Background
+    function createFloatingHearts() {
+      const container = document.getElementById('floating-hearts');
+      const heartCount = 20;
+
+      for (let i = 0; i < heartCount; i++) {
+        const heart = document.createElement('div');
+        heart.innerHTML = '❤️';
+        heart.style.position = 'absolute';
+        heart.style.fontSize = `${Math.random() * 20 + 10}px`;
+        heart.style.left = `${Math.random() * 100}vw`;
+        heart.style.top = `${Math.random() * 100}vh`;
+        heart.style.opacity = Math.random() * 0.5 + 0.1;
+        heart.style.animation = `float ${Math.random() * 10 + 5}s linear infinite`;
+        heart.style.animationDelay = `${Math.random() * 5}s`;
+        container.appendChild(heart);
+      }
+
+      const style = document.createElement('style');
+      style.innerHTML = `
+        @keyframes float {
+          0% { transform: translateY(0) rotate(0deg); }
+          100% { transform: translateY(-100vh) rotate(360deg); }
+        }
+      `;
+      document.head.appendChild(style);
+    }
+
+    createFloatingHearts();
+
+    // Particles.js Background
+    particlesJS('particles-js', {
+      particles: {
+        number: { value: 80, density: { enable: true, value_area: 800 } },
+        color: { value: "#e94560" },
+        shape: { type: "circle" },
+        opacity: { value: 0.5, random: true },
+        size: { value: 3, random: true },
+        line_linked: { enable: true, distance: 150, color: "#ff6b6b", opacity: 0.4, width: 1 },
+        move: { enable: true, speed: 2, direction: "none", random: true, straight: false, out_mode: "out" }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "repulse" },
+          onclick: { enable: true, mode: "push" }
+        }
+      }
+    });
+
+    // Shoot confetti when clicking anywhere
+    document.addEventListener('click', function() {
+      shootConfetti();
+    });
+  </script>
+</body>
+</html>
